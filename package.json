@@ -1,0 +1,19 @@
+{
+  "name": "dfapp-leads",
+  "version": "1.0.0",
+  "description": "Gestão de leads e funil de vendas para concessionária (Instagram → WhatsApp)",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node --no-warnings server/index.js",
+    "dev": "node --no-warnings --watch server/index.js",
+    "test": "node --no-warnings --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "express": "^4.22.3"
+  }
+}

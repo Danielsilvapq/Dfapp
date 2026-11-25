@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Encontre seu próximo carro</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: linear-gradient(160deg, #111827, #1f4fd1); min-height: 100vh; color: #1d2330; padding: 24px 16px; }
+    .box { background: #fff; max-width: 480px; margin: 0 auto; border-radius: 16px; padding: 24px; }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    p.sub { color: #6b7280; margin: 0 0 18px; }
+    label { display: block; font-size: 13px; color: #374151; margin: 12px 0 4px; font-weight: 600; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font: inherit; background: #fff; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips input { display: none; }
+    .chips span { display: inline-block; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 999px; cursor: pointer; font-size: 14px; }
+    .chips input:checked + span { background: #1f4fd1; border-color: #1f4fd1; color: #fff; }
+    button { width: 100%; margin-top: 20px; padding: 14px; background: #25d366; color: #06361a; border: 0; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .err { color: #b91c1c; margin-top: 10px; min-height: 18px; }
+    .ok { text-align: center; padding: 30px 0; }
+    .ok .big { font-size: 48px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <form id="f">
+      <h1>🚗 Vamos encontrar seu carro!</h1>
+      <p class="sub">Responda rapidinho e um consultor te chama no WhatsApp.</p>
+
+      <label>Seu nome *</label><input name="name" required autocomplete="name">
+      <label>WhatsApp *</label><input name="phone" required inputmode="tel" placeholder="(11) 99999-9999" autocomplete="tel">
+      <label>Seu @ do Instagram</label><input name="instagram_user" placeholder="@seuusuario">
+
+      <label>O que você procura? *</label>
+      <div class="chips">
+        <label><input type="radio" name="interest" value="compra" required><span>Comprar</span></label>
+        <label><input type="radio" name="interest" value="troca"><span>Trocar meu carro</span></label>
+        <label><input type="radio" name="interest" value="venda"><span>Vender meu carro</span></label>
+        <label><input type="radio" name="interest" value="financiamento"><span>Financiar</span></label>
+        <label><input type="radio" name="interest" value="pesquisando"><span>Só pesquisando</span></label>
+      </div>
+
+      <label>Qual veículo te interessa?</label><input name="vehicle_interest" placeholder="Ex.: Onix 2022, SUV até 100 mil...">
+      <label>Tem carro para dar na troca / vender? Qual?</label><input name="trade_in_vehicle" placeholder="Ex.: Gol 2016, 80 mil km">
+      <label>Quanto pretende investir? (R$)</label><input name="budget" inputmode="numeric" placeholder="Ex.: 80.000">
+
+      <label>Forma de pagamento</label>
+      <select name="payment"><option value="">Selecione</option><option value="avista">À vista</option><option value="financiado_entrada">Financiado com entrada</option><option value="financiado_sem_entrada">Financiado sem entrada</option><option value="consorcio">Consórcio</option><option value="nao_sabe">Ainda não sei</option></select>
+
+      <label>Quando pretende fechar negócio?</label>
+      <select name="timeline"><option value="">Selecione</option><option value="imediato">Esta semana</option><option value="30_dias">Em até 30 dias</option><option value="90_dias">Em até 3 meses</option><option value="sem_previsao">Sem previsão</option></select>
+
+      <label>Cidade</label><input name="city">
+
+      <button type="submit">Quero ser atendido no WhatsApp</button>
+      <div class="err" id="err"></div>
+    </form>
+    <div class="ok" id="ok" hidden><div class="big">✅</div><h1>Recebemos seus dados!</h1><p class="sub">Um consultor vai te chamar no WhatsApp em breve.</p></div>
+  </div>
+  <script>
+    document.getElementById('f').onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button'); btn.disabled = true;
+      const body = Object.fromEntries(new FormData(e.target).entries());
+      const params = new URLSearchParams(location.search);
+      if (params.get('utm_source')) body.notes = 'Campanha: ' + [params.get('utm_source'), params.get('utm_campaign')].filter(Boolean).join(' / ');
+      try {
+        const r = await fetch('/api/public/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(d.error || 'Erro ao enviar');
+        e.target.hidden = true; document.getElementById('ok').hidden = false;
+      } catch (err) { document.getElementById('err').textContent = err.message; btn.disabled = false; }
+    };
+  </script>
+</body>
+</html>

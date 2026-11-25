@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestão de Leads — Concessionária</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="login-view" class="login-wrap hidden">
+    <form class="login" id="login-form">
+      <h1>🚗 Gestão de Leads</h1>
+      <input name="email" type="email" placeholder="E-mail" required autocomplete="username">
+      <input name="password" type="password" placeholder="Senha" required autocomplete="current-password">
+      <div class="err" id="login-err"></div>
+      <button class="btn primary" type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <div id="app-view" class="hidden">
+    <header class="top">
+      <h1>🚗 Gestão de Leads</h1>
+      <nav id="nav">
+        <button data-view="dashboard">Dashboard</button>
+        <button data-view="funil">Funil de vendas</button>
+        <button data-view="leads">Leads</button>
+        <button data-view="vendedores" data-admin>Vendedores</button>
+      </nav>
+      <div class="user"><span id="user-name"></span><button class="btn sm" id="logout">Sair</button></div>
+    </header>
+    <main id="main"></main>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast" class="hidden"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
