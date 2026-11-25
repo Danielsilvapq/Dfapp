@@ -37,6 +37,7 @@ textarea { width: 100%; resize: vertical; }
 .card .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
 .card.hot .value { color: var(--hot); } .card.warm .value { color: var(--warm); } .card.cold .value { color: var(--cold); } .card.ok .value { color: var(--ok); }
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; }
+.grid2 > * { min-width: 0; }
 .card h3 { margin: 0 0 12px; font-size: 15px; }
 
 .funnel-bar { display: flex; align-items: center; gap: 10px; margin: 6px 0; }

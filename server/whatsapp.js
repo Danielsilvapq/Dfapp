@@ -12,12 +12,19 @@ function brl(v) {
   return Number(v) > 0 ? Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : '-';
 }
 
+function fmtPhone(p) {
+  const d = onlyDigits(p).replace(/^55(?=\d{10,11}$)/, '');
+  if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return p || '-';
+}
+
 function leadSummary(lead) {
   const l = (k, v) => (LABELS[k] && LABELS[k][v]) || v || '-';
   return [
     `*Novo lead encaminhado* ${l('classification', lead.classification)} (${lead.score} pts)`,
-    `👤 ${lead.name || '-'}`,
-    `📱 ${lead.phone || '-'}`,
+    lead.name ? `👤 ${lead.name}` : null,
+    `📱 ${fmtPhone(lead.phone)}`,
     lead.instagram_user ? `📸 @${String(lead.instagram_user).replace(/^@/, '')}` : null,
     `🎯 Interesse: ${l('interest', lead.interest)}`,
     `🚗 Veículo: ${lead.vehicle_interest || '-'}`,
